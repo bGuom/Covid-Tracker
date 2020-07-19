@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">CovidTracker</string>
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">LET`S GO</string>
+
+    <string name="slide_1_title">Select Language</string>
+    <string name="slide_1_title2">භාෂාව තෝරන්න</string>
+    <string name="slide_1_desc">English</string>
+    <string name="slide_1_desc2">සිංහල</string>
+
+
+    <string name="slide_2_title">Help to fight COVID 19 in Sri Lanka</string>
+    <string name="slide_2_desc">You can find whether you have encountered COVID 19 positive patient in last 3 weeks.</string>
+
+    <string name="slide_3_title">This app works with Bluetooth</string>
+    <string name="slide_3_desc">Please keep your bluetooth turned on whenever you go out</string>
+
+    <string name="slide_4_title">Your Privacy is Ensured</string>
+    <string name="slide_4_desc">This app does not record your location and only record nearby users around you. Everything stays on your device and will automatically delete after three weeks</string>
 </resources>
