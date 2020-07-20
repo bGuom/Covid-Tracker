@@ -2,22 +2,33 @@ package com.mobicom.covidtracker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import com.mobicom.covidtracker.Const.Config;
+import com.mobicom.covidtracker.Const.Constants;
+
+import java.util.Locale;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -28,6 +39,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private int[] layouts;
     private Button btnSkip, btnNext;
     private PrefManager prefManager;
+
+    private LinearLayout lang_en,lang_sn;
+    private ImageView ticken,ticksn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +54,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
         if (!prefManager.isFirstTimeLaunch() || !Config.SHOW_INTRO) {
-            launchHomeScreen();
+            launchDashScreen();
             finish();
         }
 
@@ -55,6 +69,8 @@ public class WelcomeActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnSkip = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
+
+
 
 
         // layouts of all welcome sliders
@@ -78,7 +94,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchHomeScreen();
+                launchJoinScreen();
             }
         });
 
@@ -92,7 +108,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     // move to next screen
                     viewPager.setCurrentItem(current);
                 } else {
-                    launchHomeScreen();
+                    launchJoinScreen();
                 }
             }
         });
@@ -121,9 +137,14 @@ public class WelcomeActivity extends AppCompatActivity {
         return viewPager.getCurrentItem() + i;
     }
 
-    private void launchHomeScreen() {
+    private void launchDashScreen() {
         prefManager.setFirstTimeLaunch(false);
         startActivity(new Intent(WelcomeActivity.this, DashboardActivity.class));
+        finish();
+    }
+    private void launchJoinScreen() {
+        prefManager.setFirstTimeLaunch(false);
+        startActivity(new Intent(WelcomeActivity.this, JoinActivity.class));
         finish();
     }
 
@@ -135,7 +156,8 @@ public class WelcomeActivity extends AppCompatActivity {
             addBottomDots(position);
 
             // changing the next button text 'NEXT' / 'GOT IT'
-            if (position == layouts.length - 1) {
+
+            if(position == layouts.length - 1) {
                 // last page. make button text to GOT IT
                 btnNext.setText(getString(R.string.start));
                 btnSkip.setVisibility(View.GONE);
@@ -182,6 +204,48 @@ public class WelcomeActivity extends AppCompatActivity {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = layoutInflater.inflate(layouts[position], container, false);
+
+            if (position==0){
+                lang_en = (LinearLayout)view.findViewById(R.id.lang_en);
+                lang_sn = (LinearLayout)view.findViewById(R.id.lang_sn);
+
+                ticken = (ImageView) view.findViewById(R.id.ticken);
+                ticksn = (ImageView) view.findViewById(R.id.ticksn);
+
+                SharedPreferences prefs = WelcomeActivity.this.getSharedPreferences(Constants.APP_LANG_PREF, MODE_PRIVATE);
+                String APP_LANG = prefs.getString("Lang","EN");
+                if(APP_LANG.equals("si")){
+                    ticken.setVisibility(View.INVISIBLE);
+                    ticksn.setVisibility(View.VISIBLE);
+                }
+
+                lang_sn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("covidtrack","clicked");
+                        ticken.setVisibility(View.INVISIBLE);
+                        ticksn.setVisibility(View.VISIBLE);
+                        SharedPreferences.Editor editor = WelcomeActivity.this.getSharedPreferences(Constants.APP_LANG_PREF, MODE_PRIVATE).edit();
+                        editor.putString("Lang","si");
+                        editor.apply();
+                        setLocale("si");
+
+                    }
+                });
+
+                lang_en.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("covidtrack","clicked");
+                        ticken.setVisibility(View.VISIBLE);
+                        ticksn.setVisibility(View.INVISIBLE);
+                        SharedPreferences.Editor editor = WelcomeActivity.this.getSharedPreferences(Constants.APP_LANG_PREF, MODE_PRIVATE).edit();
+                        editor.putString("Lang","en");
+                        editor.apply();
+                        setLocale("en");
+                    }
+                });
+            }
             container.addView(view);
 
             return view;
@@ -203,5 +267,17 @@ public class WelcomeActivity extends AppCompatActivity {
             View view = (View) object;
             container.removeView(view);
         }
+    }
+
+    public void setLocale(String localeName) {
+        Locale myLocale = new Locale(localeName);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, WelcomeActivity.class);
+        startActivity(refresh);
+
     }
 }

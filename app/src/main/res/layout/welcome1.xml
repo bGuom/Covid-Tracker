@@ -39,6 +39,7 @@
 
 
         <LinearLayout
+            android:id="@+id/lang_en"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -72,6 +73,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lang_sn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

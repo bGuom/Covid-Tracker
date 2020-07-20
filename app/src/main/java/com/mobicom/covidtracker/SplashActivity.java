@@ -9,6 +9,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mobicom.covidtracker.Const.Config;
+
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
-        mainIntent = new Intent(SplashActivity.this,WelcomeActivity.class);
+        mainIntent = new Intent(SplashActivity.this,JoinActivity.class);
 
         Intent intent = getIntent();
         String action = intent.getAction();

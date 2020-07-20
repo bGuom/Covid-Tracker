@@ -16,13 +16,10 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:layout_centerInParent="true"
+            <ImageView
                 android:layout_width="@dimen/img_width_height"
                 android:layout_height="@dimen/img_width_height"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_fileName="team.json" />
+                android:src="@drawable/otp" />
 
 
             <TextView
@@ -31,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:text="@string/join_with_covid_tracker"
+                android:text="@string/verify_your_number"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="35sp" />
@@ -45,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:text="@string/join_desc"
+                android:text="@string/verify_number_desc"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -57,26 +54,26 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/contactno"
+                    android:id="@+id/code"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/contact_number">
+                    android:hint="@string/code">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone" />
+                        android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                    android:id="@+id/join_btn"
+                    android:id="@+id/verify_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/roundbutton"
-                    android:text="@string/join"
+                    android:text="@string/verify"
                     android:textColor="#fff" />
 
                 <ProgressBar

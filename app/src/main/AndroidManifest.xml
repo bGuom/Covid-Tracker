@@ -18,6 +18,7 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".WelcomeActivity"/>
         <activity android:name=".JoinActivity"/>
+        <activity android:name=".PhoneVerificationActivity"/>
         <activity android:name=".DashboardActivity"/>
     </application>
 

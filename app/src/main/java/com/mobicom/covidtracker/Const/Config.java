@@ -1,4 +1,4 @@
-package com.mobicom.covidtracker;
+package com.mobicom.covidtracker.Const;
 
 public class Config {
 

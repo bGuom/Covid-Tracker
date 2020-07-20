@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
@@ -35,5 +35,7 @@ dependencies {
 
     //Lottie Animation
     implementation 'com.airbnb.android:lottie:3.4.0'
+
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
 
 }

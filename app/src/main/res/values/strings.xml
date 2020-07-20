@@ -19,4 +19,14 @@
 
     <string name="slide_4_title">Your Privacy is Ensured</string>
     <string name="slide_4_desc">This app does not record your location and only record nearby users around you. Everything stays on your device and will automatically delete after three weeks</string>
+    <string name="join_with_covid_tracker">JOIN with Covid Tracker</string>
+    <string name="join_desc">We will generate a unique id for you ! Optionally you can provide your mobile number. It will be used to contact you if required</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="join">JOIN</string>
+    <string name="verify_your_number">Verify your Number</string>
+    <string name="verify_number_desc">We sent a verification code to your number. Please enter it here to verify the number</string>
+    <string name="code">Code</string>
+    <string name="verify">VERIFY</string>
+    <string name="verification_succ">Verification Successful</string>
+    <string name="wrong_code">Entered code is incorrect ! Please try again</string>
 </resources>

@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">CovidTracker</string>
+
+    <string name="next">ඊලඟ</string>
+    <string name="skip">මඟ හරින්න</string>
+    <string name="start">යමු</string>
+
+    <string name="slide_1_title">Select Language</string>
+    <string name="slide_1_title2">භාෂාව තෝරන්න</string>
+    <string name="slide_1_desc">English</string>
+    <string name="slide_1_desc2">සිංහල</string>
+
+
+    <string name="slide_2_title">ශ්‍රී ලංකාවේ COVID 19 සමඟ සටන් කිරීමට උදව් වන්න</string>
+    <string name="slide_2_desc">පසුගිය සති 3 තුළ ඔබට COVID 19 ධනාත්මක රෝගියෙකු හමු වී ඇත්දැයි ඔබට සොයාගත හැකිය.</string>
+
+    <string name="slide_3_title">මෙම යෙදුම බ්ලූටූත් සමඟ ක්‍රියා කරයි</string>
+    <string name="slide_3_desc">කරුණාකර ඔබ පිටතට යන සෑම විටම ඔබේ බ්ලූටූත් සක්‍රිය කර තබන්න</string>
+
+    <string name="slide_4_title">ඔබේ පෞද්ගලිකත්වය සහතික කර ඇත</string>
+    <string name="slide_4_desc">මෙම යෙදුම ඔබගේ ස්ථානය පටිගත නොකරන අතර ඔබ අවට සිටින පරිශීලකයින් පමණක් පටිගත කරයි. සෑම දෙයක්ම ඔබගේ උපාංගයේ රැඳී ඇති අතර සති තුනකට පසු ස්වයංක්‍රීයව මැකෙනු ඇත</string>
+    <string name="join_with_covid_tracker">Covid Tracker සමඟ එක්වන්න</string>
+    <string name="join_desc">අපි ඔබ වෙනුවෙන් අද්විතීය හැඳුනුම්පතක් ජනනය කරන්නෙමු! විකල්පයක් ලෙස ඔබට ඔබේ ජංගම දුරකථන අංකය ලබා දිය හැකිය. අවශ්‍ය නම් ඔබ හා සම්බන්ධ වීමට එය භාවිතා කරනු ඇත</string>
+    <string name="contact_number">ඇමතුම් අංකය</string>
+    <string name="join">එක්වන්න</string>
+    <string name="verify_your_number">Verify your Number</string>
+    <string name="verify_number_desc">We sent a verification code to your number. Please enter it here to verify the number</string>
+    <string name="code">Code</string>
+    <string name="verify">VERIFY</string>
+    <string name="verification_succ">Verification Successful</string>
+    <string name="wrong_code">Entered code is incorrect ! Please try again</string>
+</resources>
