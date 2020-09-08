@@ -40,7 +40,7 @@ public class DBConstants {
     public static final String CREATE_CONTACT_TABLE = "CREATE TABLE " + TABLE_CONTACT_HISTORY + "("
             + COLUMN_CONTACT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_CONTACT_DATE + " DATE,"
-            + COLUMN_CONTACT_TIME + " TIME,"
+            + COLUMN_CONTACT_TIME + " TEXT,"
             + COLUMN_CONTACT_LEVEL + " INTEGER,"
             + COLUMN_CONTACT_DIAGNOSIS_KEY + " TEXT"
             + ")";

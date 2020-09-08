@@ -1,5 +1,6 @@
 package com.mobicom.covidtracker.Utils;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -23,17 +24,30 @@ import java.util.function.Consumer;
 public class DistanceMeter {
     private FirebaseCustomLocalModel localModel;
 
+    // declare context
+    private static Context mContext;
+
+    // singleton
+    private static DistanceMeter distanceMeter = null;
+
+    // common
+
+
+    public static DistanceMeter getInstance(Context context) {
+        if (distanceMeter == null) {
+            mContext = context;
+            distanceMeter = new DistanceMeter();
+        }
+        return distanceMeter;
+    }
+
     public void initDistanceModel(){
         localModel = new FirebaseCustomLocalModel.Builder()
                 .setAssetFilePath("model.tflite")
                 .build();
     }
 
-
-
-
-
-    public void predictDistance(ModelInput mInput, Consumer<Double> callback){
+    public void predictDistance(ModelInput mInput){
         FirebaseModelInterpreter interpreter;
         try {
             FirebaseModelInterpreterOptions options =
@@ -47,9 +61,9 @@ public class DistanceMeter {
                                 .build();
                 float[][] input = new float[1][8];
                 input[0][0]=mInput.getSenderBatteryCap();
-                input[0][1]=mInput.getReceiverBatteryLevel();
+                input[0][1]=mInput.getSenderBatteryLevel();
                 input[0][2]=mInput.getReceiverBatteryLevel();
-                input[0][3]=mInput.getReceiverBTVersion();
+                input[0][3]=mInput.getSenderBTVersion();
                 input[0][4]=mInput.getSenderTemp();
                 input[0][5]=mInput.getReceiverTemp();//
                 input[0][6]=mInput.getReceiverBTVersion();
@@ -64,6 +78,7 @@ public class DistanceMeter {
                                     public void onSuccess(FirebaseModelOutputs result) {
                                         float[][] output = result.getOutput(0);
                                         float probability = output[0][0];
+                                        Log.d("Bluel",Float.toString(probability));
                                         if(probability>50f){
                                             Log.d("Bluel","close");
                                         }else {

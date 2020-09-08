@@ -10,8 +10,9 @@ public class ModelInput {
     private Float receiverTemp;
     private Float receiverBTVersion;
     private Float rssi;
+    private String senderKey;
 
-    public ModelInput(Float senderBatteryCap, Float senderBatteryLevel, Float receiverBatteryLevel, Float senderBTVersion, Float senderTemp, Float receiverTemp, Float receiverBTVersion, Float rssi) {
+    public ModelInput(Float senderBatteryCap, Float senderBatteryLevel, Float receiverBatteryLevel, Float senderBTVersion, Float senderTemp, Float receiverTemp, Float receiverBTVersion, Float rssi,String key) {
         this.senderBatteryCap = senderBatteryCap;
         this.senderBatteryLevel = senderBatteryLevel;
         this.receiverBatteryLevel = receiverBatteryLevel;
@@ -20,10 +21,15 @@ public class ModelInput {
         this.receiverTemp = receiverTemp;
         this.receiverBTVersion = receiverBTVersion;
         this.rssi = rssi;
+        this.senderKey =key;
     }
 
     public Float getSenderBatteryCap() {
         return senderBatteryCap;
+    }
+
+    public String getSenderKey() {
+        return senderKey;
     }
 
     public void setSenderBatteryCap(Float senderBatteryCap) {

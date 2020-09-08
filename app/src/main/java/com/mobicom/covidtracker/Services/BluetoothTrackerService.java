@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,7 +40,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
 import static android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_FINISHED;
 import static android.bluetooth.BluetoothAdapter.getDefaultAdapter;
 import static android.bluetooth.BluetoothDevice.ACTION_FOUND;
@@ -48,15 +48,45 @@ import static android.bluetooth.BluetoothDevice.ACTION_FOUND;
 public class BluetoothTrackerService extends Service {
 
     /** Bluetooth interface provided by Android SDK */
-    public static android.bluetooth.BluetoothAdapter mBluetoothAdapter;
-
-    /** List of bluetooth devices */
-    private ArrayList<String> mBluetoothDevices;
-
-
-
+    public static BluetoothAdapter mBluetoothAdapter;
     /** Broadcast Bluetooth signal to discover new Bluetooth devices */
     public BroadcastReceiver mBroadcastReceiver ;
+
+    String NOTIFICATION_CHANNEL_ID = "commobicomcovidtracker";
+    String channelName = "TrackerService";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d("bluel","service Started");
+
+
+        Intent activityIntent = new Intent(this, DashboardActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+        createNotificationChannel();
+
+
+        // This always shows up in the notifications area when this Service is running.
+        // TODO: String localization
+        Notification not = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            not = new Notification.Builder(this,NOTIFICATION_CHANNEL_ID).
+                    setContentTitle(getString(R.string.tracker_active))
+                    .setSmallIcon(R.drawable.ic_notif).
+                            setContentIntent(pendingIntent).build();
+        }else{
+            not = new Notification.Builder(this).
+                    setContentTitle(getString(R.string.tracker_active))
+                    .setSmallIcon(R.drawable.ic_notif).
+                            setContentIntent(pendingIntent).build();
+        }
+        startForeground(101, not);
+        initBluetoothService();
+    }
 
 
     @Nullable
@@ -68,48 +98,25 @@ public class BluetoothTrackerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d("bluel","service Started");
 
 
-        Intent activityIntent = new Intent(this, DashboardActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-                activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String NOTIFICATION_CHANNEL_ID = "com.mobicom.covidtracker";
-        String channelName = "TrackerService";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
-            chan.setLightColor(Color.BLUE);
-            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            assert manager != null;
-            manager.createNotificationChannel(chan);
-        }
-
-
-        // This always shows up in the notifications area when this Service is running.
-        // TODO: String localization
-        Notification not = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            not = new Notification.Builder(this,NOTIFICATION_CHANNEL_ID).
-                    setContentTitle(getString(R.string.tracker_active))
-                    .setSmallIcon(R.drawable.ic_notif).
-                    setContentIntent(pendingIntent).build();
-        }else{
-            not = new Notification.Builder(this).
-                    setContentTitle(getString(R.string.tracker_active))
-                    .setSmallIcon(R.drawable.ic_notif).
-                    setContentIntent(pendingIntent).build();
-        }
-        startForeground(101, not);
-
-        initBluetoothService();
 
         //we have some options for service
         //start sticky means service will be explicit started and stopped
         return START_STICKY;
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    channelName,
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
     }
 
     private void initBluetoothService() {
@@ -118,11 +125,8 @@ public class BluetoothTrackerService extends Service {
 
         // Initialize bluetooth adapter
         mBluetoothAdapter = getDefaultAdapter();
-        runBroadcastUpdater();
-        // Setup list view
-        mBluetoothDevices = new ArrayList<>();
-        // Ensure bluetooth is enabled
-        ensureBluetoothIsEnable();
+
+
         // Register BroadcastReceiver
         mBroadcastReceiver = new BroadcastReceiver() {
 
@@ -148,14 +152,16 @@ public class BluetoothTrackerService extends Service {
         };
 
         registerBroadcastReceiver(new String[]{ACTION_FOUND, ACTION_DISCOVERY_FINISHED});
+
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopScan();
+        //stopScan();
         //broadcastUpdater.stop();
+        Log.d("Bluel", "destroy");
         stopForeground(true);
         stopSelf();
     }
@@ -166,6 +172,7 @@ public class BluetoothTrackerService extends Service {
     private void scanArea(){
         ensureBluetoothIsEnable();
         mBluetoothAdapter.startDiscovery();
+        Log.d("Bluel", "scan");
     }
 
     private void stopScan() {
@@ -230,7 +237,7 @@ public class BluetoothTrackerService extends Service {
                         String encryptedPayload = AES.encrypt(payload,secret);
                         mBluetoothAdapter.setName(encryptedPayload);
                         scanArea();
-                        Log.d("Bluel", "scan");
+
 
                     }
                 }, 0, 10, TimeUnit.SECONDS);
@@ -359,13 +366,18 @@ public class BluetoothTrackerService extends Service {
         for (String action : actions)
             intentFilter.addAction(action);
 
+        Log.d("bluel","Registered");
+
         registerReceiver(mBroadcastReceiver, intentFilter);
+
+        runBroadcastUpdater();
     }
 
 
     private void ensureBluetoothIsEnable() {
 
         if (!mBluetoothAdapter.isEnabled())
+            Log.d("bluel","stopped");
             stopScan();
             stopForeground(true);
             stopSelf();

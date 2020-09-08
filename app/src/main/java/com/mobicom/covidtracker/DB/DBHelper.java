@@ -1,11 +1,17 @@
 package com.mobicom.covidtracker.DB;
 
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.mobicom.covidtracker.Const.DBConstants;
+import com.mobicom.covidtracker.Models.ContactData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -42,26 +48,80 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-
-    /**
-    public void addUser(User user) {
+    public void recordContact(ContactData contact) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USER_NAME, user.getName());
-        values.put(COLUMN_USER_EMAIL, user.getEmail());
-        values.put(COLUMN_USER_AGE, user.getAge());
-        values.put(COLUMN_USER_GENDER, user.getGender());
-        values.put(COLUMN_USER_HEIGHT, user.getHeightCm());
-        values.put(COLUMN_USER_WEIGHT, user.getWeightKg());
-        values.put(COLUMN_USER_PASSWORD, user.getPassword());
+        values.put(DBConstants.COLUMN_CONTACT_DATE, contact.getDate());
+        values.put(DBConstants.COLUMN_CONTACT_TIME, contact.getTime());
+        values.put(DBConstants.COLUMN_CONTACT_LEVEL, contact.getLevel());
+        values.put(DBConstants.COLUMN_CONTACT_DIAGNOSIS_KEY, contact.getKey());
+
 
         // Inserting Row
-        db.insert(TABLE_USER, null, values);
+        db.insert(DBConstants.TABLE_CONTACT_HISTORY, null, values);
+        db.close();
+    }
+
+    public List<ContactData> getAllContactData() {
+        // array of columns to fetch
+        String[] columns = {
+                DBConstants.COLUMN_CONTACT_ID,
+                DBConstants.COLUMN_CONTACT_DATE,
+                DBConstants.COLUMN_CONTACT_TIME,
+                DBConstants.COLUMN_CONTACT_LEVEL,
+                DBConstants.COLUMN_CONTACT_DIAGNOSIS_KEY,
+        };
+        // sorting orders
+        String sortOrder =
+                DBConstants.COLUMN_CONTACT_DATE + " DESC";
+        List<ContactData> contactList = new ArrayList<ContactData>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // query the user table
+
+        Cursor cursor = db.query(DBConstants.TABLE_CONTACT_HISTORY, //Table to query
+                columns,    //columns to return
+                null,        //columns for the WHERE clause
+                null,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                sortOrder); //The sort order
+
+
+        // Traversing through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                ContactData contactData = new ContactData();
+                contactData.setDate(cursor.getString(cursor.getColumnIndex(DBConstants.COLUMN_CONTACT_DATE)));
+                contactData.setTime(cursor.getString(cursor.getColumnIndex(DBConstants.COLUMN_CONTACT_TIME)));
+                contactData.setLevel(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBConstants.COLUMN_CONTACT_LEVEL))));
+                contactData.setKey(cursor.getString(cursor.getColumnIndex(DBConstants.COLUMN_CONTACT_DIAGNOSIS_KEY)));
+
+                // Adding user record to list
+                contactList.add(contactData);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        // return user list
+        return contactList;
+    }
+
+    //delete record from database
+    public void deleteOldRecords(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + DBConstants.TABLE_CONTACT_HISTORY + " WHERE " + DBConstants.COLUMN_CONTACT_DATE + " < date('now','-21 day');");
         db.close();
     }
 
 
+
+
+
+    /**
 
     public User getUser(String email) {
         // array of columns to fetch
@@ -102,59 +162,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<User> getAllUser() {
-        // array of columns to fetch
-        String[] columns = {
-                COLUMN_USER_ID,
-                COLUMN_USER_EMAIL,
-                COLUMN_USER_NAME,
-                COLUMN_USER_AGE,
-                COLUMN_USER_GENDER,
-                COLUMN_USER_HEIGHT,
-                COLUMN_USER_WEIGHT,
-                COLUMN_USER_PASSWORD
-        };
-        // sorting orders
-        String sortOrder =
-                COLUMN_USER_NAME + " ASC";
-        List<User> userList = new ArrayList<User>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // query the user table
-
-        Cursor cursor = db.query(TABLE_USER, //Table to query
-                columns,    //columns to return
-                null,        //columns for the WHERE clause
-                null,        //The values for the WHERE clause
-                null,       //group the rows
-                null,       //filter by row groups
-                sortOrder); //The sort order
-
-
-        // Traversing through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                User user = new User();
-                user.setUserId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_ID))));
-                user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
-                user.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
-                user.setAge(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_AGE))));
-                user.setGender(cursor.getString(cursor.getColumnIndex(COLUMN_USER_GENDER)));
-                user.setHeightCm(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_HEIGHT))));
-                user.setWeightKg(Float.parseFloat(cursor.getString(cursor.getColumnIndex(COLUMN_USER_WEIGHT))));
-                user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
-
-                // Adding user record to list
-                userList.add(user);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-
-        // return user list
-        return userList;
-    }
 
 
     public void updateUser(User user) {

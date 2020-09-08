@@ -7,7 +7,6 @@ public class BluetoothPayload {
 
     private String broadcastID;
     private int key;
-
     private String btVersion;
     private String batteryPercentage;
     private String cpuTemp;

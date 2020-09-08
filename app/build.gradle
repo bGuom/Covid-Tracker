@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
 
 dependencies {
@@ -44,6 +48,8 @@ dependencies {
 
     //Volley
     implementation 'com.android.volley:volley:1.1.1'
+
+    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 
     implementation 'com.android.support:multidex:1.0.3'
 

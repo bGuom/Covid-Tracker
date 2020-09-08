@@ -71,22 +71,24 @@ public class SharedPrefManager {
     }
 
     public String getDiagnosisKey() {
-        //return appPreferences.getString(PrefKey.KEY_DIAGNOSIS_KEY, "");
-        return "z5KyMg";
+        return appPreferences.getString(PrefKey.KEY_DIAGNOSIS_KEY, "");
+        //return "z5KyMg";
     }
 
     public String getBroadcastSecretKey() {
-        //return appPreferences.getString(PrefKey.KEY_BROADCAST_SECRET_KEY, "mobiComCovidTracker");
-        return "e3d95be4-d6c9-4d94-a3ff-d8008e740fa3";
+        return appPreferences.getString(PrefKey.KEY_BROADCAST_SECRET_KEY, "mobiComCovidTracker");
+        //return "e3d95be4-d6c9-4d94-a3ff-d8008e740fa3";
     }
 
     public ArrayList<String> getIDSecretKeys() {
         ArrayList<String> keys = new ArrayList<String>();
-        //keys.addAll(Arrays.asList( appPreferences.getString(PrefKey.KEY_ID_SECRET_KEYS, "mobiComCovidTracker").split(",")));
+        keys.addAll(Arrays.asList( appPreferences.getString(PrefKey.KEY_ID_SECRET_KEYS, "mobiComCovidTracker").split(",")));
+        /**
         keys.add("ed524a3e-d498-4951-aea4-4d2347241c94");
         keys.add("92c8df76-b035-4ee8-a12c-d55cb0a7191e");
         keys.add("cef67a4f-50a0-41e4-b7f7-35aae0d66051");
         keys.add("1f36a740-6675-4dd4-8db3-6cb0fa93c173");
+         **/
 
 
 
