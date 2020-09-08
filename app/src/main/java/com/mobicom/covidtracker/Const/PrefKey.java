@@ -12,5 +12,7 @@ public class PrefKey {
     public static final String KEY_ID_SECRET_KEYS = "idEncryptionKeys";
     public static final String KEY_BROADCAST_SECRET_KEY = "broadcastEncryptionKey";
 
+    public static final String KEY_IS_ALERT_ENABLED = "alertEnabled";
+
 
 }

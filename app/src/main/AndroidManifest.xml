@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mobicom.covidtracker">
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +27,16 @@
         <activity android:name=".JoinActivity"/>
         <activity android:name=".PhoneVerificationActivity"/>
         <activity android:name=".DashboardActivity"/>
+
+        <!-- defining the service class here -->
+        <service
+            android:name=".Services.BluetoothTrackerService"
+            android:enabled="true"
+            android:exported="true"/>
+
+
     </application>
+
+
 
 </manifest>

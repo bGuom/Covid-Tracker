@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
 import android.util.Base64;
+import android.util.Log;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -19,7 +20,7 @@ public class AES {
     public static SecretKeySpec secretKey;
     private static byte[] key;
 
-    public static void setKey(String myKey)
+    private static void setKey(String myKey)
     {
         MessageDigest sha = null;
         try {
@@ -28,6 +29,7 @@ public class AES {
             key = sha.digest(key);
             key = Arrays.copyOf(key, 16);
             secretKey = new SecretKeySpec(key, "AES");
+
         }
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -42,14 +44,13 @@ public class AES {
         try
         {
             setKey(secret);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            Cipher cipher = Cipher.getInstance("AES/CFB/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey,new IvParameterSpec(key));
             return Base64.encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")), Base64.DEFAULT);
-            //return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
         }
         catch (Exception e)
         {
-            System.out.println("Error while encrypting: " + e.toString());
+            Log.d("Bluel",e.toString());
         }
         return null;
     }
@@ -59,14 +60,13 @@ public class AES {
         try
         {
             setKey(secret);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
-            //return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
+            Cipher cipher = Cipher.getInstance("AES/CFB/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey,new IvParameterSpec(key));
             return new String(cipher.doFinal(Base64.decode(strToDecrypt, Base64.DEFAULT)));
         }
         catch (Exception e)
         {
-            System.out.println("Error while decrypting: " + e.toString());
+            Log.d("Bluel",e.toString());
         }
         return null;
     }

@@ -29,4 +29,5 @@
     <string name="verify">VERIFY</string>
     <string name="verification_succ">Verification Successful</string>
     <string name="wrong_code">Entered code is incorrect ! Please try again</string>
+    <string name="tracker_active">CovidTracker is Active</string>
 </resources>

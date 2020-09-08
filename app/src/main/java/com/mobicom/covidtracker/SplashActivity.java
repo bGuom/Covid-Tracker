@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
-        mainIntent = new Intent(SplashActivity.this,JoinActivity.class);
+        mainIntent = new Intent(SplashActivity.this, WelcomeActivity.class);
 
         Intent intent = getIntent();
         String action = intent.getAction();
