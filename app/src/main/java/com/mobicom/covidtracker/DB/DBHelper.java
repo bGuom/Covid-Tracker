@@ -117,6 +117,36 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean checkKey(String key,String date) {
+
+        // array of columns to fetch
+        String[] columns = {
+                DBConstants.COLUMN_CONTACT_DATE,
+                DBConstants.COLUMN_CONTACT_DIAGNOSIS_KEY
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+        // selection criteria
+        String selection = DBConstants.COLUMN_CONTACT_DATE + " = ?" + " AND " + DBConstants.COLUMN_CONTACT_DIAGNOSIS_KEY + " = ?";
+
+        // selection arguments
+        String[] selectionArgs = {date, key};
+
+        // query user table with conditions
+        Cursor cursor = db.query(DBConstants.TABLE_CONTACT_HISTORY, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                       //filter by row groups
+                null);                      //The sort order
+
+        int cursorCount = cursor.getCount();
+
+        cursor.close();
+        db.close();
+        return cursorCount > 0;
+    }
+
 
 
 

@@ -42,6 +42,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -181,6 +182,8 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
         imgGetQR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -668,13 +671,15 @@ public class DashboardActivity extends AppCompatActivity {
                                             Log.d("Bluel","close");
                                             vibrate();
                                             ContactData contactData = new ContactData(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),new SimpleDateFormat("HH:mm:ss").format(new Date()),1,mInput.getSenderKey());
-
-                                            dbHelper.recordContact(contactData);
+                                            if(!dbHelper.checkKey(contactData.getKey(),contactData.getDate())) {
+                                                dbHelper.recordContact(contactData);
+                                            }
                                         }else {
                                             Log.d("Bluel","long");
                                             ContactData contactData = new ContactData(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),new SimpleDateFormat("HH:mm:ss").format(new Date()),0,mInput.getSenderKey());
-
+                                            if(!dbHelper.checkKey(contactData.getKey(),contactData.getDate())) {
                                             dbHelper.recordContact(contactData);
+                                            }
                                         }
 
 
